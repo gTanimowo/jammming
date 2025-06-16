@@ -11,3 +11,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+:root {
+  --header-bg: #101334b7;
+  --header-hl: #2F58CD; /*header highlight */
+}

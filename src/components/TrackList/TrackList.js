@@ -1,9 +1,14 @@
-import React from 'react'
+import React from "react";
+import Track from "../Track/Track";
 
-const TrackList = () => {
+const TrackList = ({ tracks, isRemoval }) => {
   return (
-    <div>TrackList</div>
-  )
-}
+    <div>
+      {tracks.map((track) => (
+        <Track key={track.id} track={track} isRemoval={isRemoval} />
+      ))}
+    </div>
+  );
+};
 
-export default TrackList
+export default TrackList;

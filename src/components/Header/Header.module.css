@@ -1,0 +1,17 @@
+.header{
+    background-color: var(--header-bg);
+    text-align: center;
+    padding: 5px 0;
+
+}
+
+.heading{
+    color: #fff;
+    margin: 0;
+
+}
+
+
+.highlight{
+    color: var(--header-hl);
+}

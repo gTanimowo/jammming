@@ -1,0 +1,28 @@
+.buttonContainer {
+    width: 100%;
+    display: block;
+    margin-top: 1rem; 
+    text-align: center; 
+  }
+
+.button {
+    background-color: var(--header-hl); 
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 25px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .button:hover {
+    background-color: #3966e1; 
+    transform: scale(1.03);
+  }
+  
+  .button:focus {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+  }
+  

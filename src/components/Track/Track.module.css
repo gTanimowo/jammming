@@ -1,0 +1,38 @@
+.track {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .trackInfo {
+    flex-grow: 1;
+  }
+  
+  .trackTitle {
+    font-weight: bold;
+    font-size: 1rem;
+    margin: 0;
+    color: white;
+  }
+  
+  .trackArtist {
+    font-size: 0.85rem;
+    margin: 2px 0 0;
+    color: #c7c7c7;
+  }
+  
+  .trackButton {
+    background: none;
+    border: none;
+    color: #a84df5;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .trackButton:hover {
+    transform: scale(1.1);
+  }
+  

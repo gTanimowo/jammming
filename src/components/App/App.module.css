@@ -1,1 +1,16 @@
-
+.container {
+    background: 
+      linear-gradient(rgba(18, 0, 52, 0.6), rgba(18, 0, 52, 0.6)),
+      url('../../assets/backgroundImage.jpg') center center no-repeat;
+    background-size: cover; 
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .mainContent {
+    display: flex;
+    gap: 20px;
+    justify-content: space-around;
+    padding: 20px 0;
+  }
