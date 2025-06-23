@@ -4,7 +4,7 @@ const redirectUri = process.env.REACT_APP_SPOTIFY_REDIRECT_URI;
 const scope = process.env.REACT_APP_SPOTIFY_SCOPE;
 
 const Spotify = {
-  getAccessToken() {
+  async getAccessToken() {
     if (accessToken) return accessToken;
 
     const storedToken = localStorage.getItem("access_token");
@@ -29,8 +29,9 @@ const Spotify = {
       window.history.pushState("Access Token", null, "/");
       return accessToken;
     } else {
+      // Save last search term if any
       const urlParams = new URLSearchParams(window.location.search);
-      const searchTerm = urlParams.get("search") || ""; // Or get from your app state
+      const searchTerm = urlParams.get("search") || "";
 
       if (searchTerm) {
         localStorage.setItem("last_search_term", searchTerm);
@@ -41,11 +42,13 @@ const Spotify = {
       )}&redirect_uri=${encodeURIComponent(redirectUri)}`;
 
       window.location = authUrl;
+
+      // Return a promise that never resolves since user is redirected
+      return new Promise(() => {});
     }
   },
-
   async search(term) {
-    const token = Spotify.getAccessToken();
+    const token = await Spotify.getAccessToken();
     const endpoint = `https://api.spotify.com/v1/search?type=track&q=${encodeURIComponent(
       term
     )}`;
