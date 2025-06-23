@@ -1,6 +1,7 @@
 .playlistContainer {
     flex: 1;
     background-color: rgba(18, 0, 52, 0.75);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     padding: 20px;
     border-radius: 8px;
     color: white;
@@ -8,4 +9,34 @@
     flex-direction: column;
     justify-content: space-between;
     max-width: 35%;
+  }
+
+  .playlistInput {
+    width: 100%;
+    padding: 8px 5px;
+    font-size: 1.2rem;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+    margin-bottom: 16px;
+  }
+  
+  .playlistTitle {
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 16px;
+    cursor: pointer;
+  }
+  
+  .playlistTitle:hover {
+    text-decoration: underline;
+  }
+  
+
+  @media (max-width: 768px) {
+    .playlistContainer {
+      max-width: 80% !important;  /* full width on mobile */
+      margin: 0 auto 20px auto;    /* center horizontally and add bottom spacing */
+    }
   }

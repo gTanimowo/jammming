@@ -1,6 +1,7 @@
 .resultsContainer {
     flex: 1;
     background-color: rgba(18, 0, 52, 0.75);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     padding: 20px;
     border-radius: 8px;
     color: white;
@@ -9,3 +10,11 @@
     max-width: 35%;
   }
   
+  @media (max-width: 768px) {
+  
+    /* Override resultsContainer width on mobile to be wider */
+    .resultsContainer {
+      max-width: 80% !important;  /* let it fill container */
+      margin: 20px auto 50px auto;    /* center and add bottom margin */
+    }
+  }

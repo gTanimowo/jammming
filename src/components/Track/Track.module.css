@@ -36,3 +36,9 @@
     transform: scale(1.1);
   }
   
+  .previewAudio {
+    margin-top: 0.5rem;
+    width: 100%;
+    max-width: 300px;
+  }
+  

@@ -26,3 +26,10 @@
     outline-offset: 2px;
   }
   
+
+  @media (max-width: 768px) {
+
+    .button  {
+      padding: 10px 50px;
+    }
+  }

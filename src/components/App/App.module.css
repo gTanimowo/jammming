@@ -13,4 +13,20 @@
     gap: 20px;
     justify-content: space-around;
     padding: 20px 0;
+    margin-top: 20px;
   }
+
+  /* For smaller screens (mobile/tablet), stack vertically */
+  @media (max-width: 768px) {
+    .mainContent {
+      display: block;
+      padding: 10px 15px;
+      margin: 0 auto;
+     
+    }
+  
+    .mainContent > * {
+      margin-bottom: 20px;
+    }
+  }
+  

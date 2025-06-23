@@ -1,70 +1,89 @@
-# Getting Started with Create React App
+# Jammming React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React web application that lets users search for music, build a playlist, and save it directly to their Spotify account.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- Spotify search integration
+- Add/remove tracks from a custom playlist
+- Edit playlist name
+- Save playlist to user's Spotify account
+- Responsive layout for mobile and desktop
+- Access token management with redirect support
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- React
+- Spotify Web API
+- CSS Modules
+- LocalStorage for persistence
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Getting Started
 
-### `npm test`
+### Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js and npm installed
+- A Spotify Developer Account
 
-### `npm run build`
+### Spotify App Setup
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Go to [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
+2. Create a new app
+3. Set your Redirect URI to: `http://localhost:3000/`
+4. Copy your **Client ID**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Environment Setup
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Create a `.env` file in the root of your project:
 
-### `npm run eject`
+```
+REACT_APP_SPOTIFY_CLIENT_ID=your_client_id_here
+REACT_APP_REDIRECT_URI=http://localhost:3000/
+REACT_APP_SPOTIFY_SCOPES=playlist-modify-public playlist-modify-private
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Installation
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm install
+npm start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+The app will run on `http://localhost:3000`
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Folder Structure
 
-## Learn More
+```
+/src
+  /components
+    Header/
+    SearchBar/
+    SearchResults/
+    Playlist/
+    TrackList/
+    Track/
+    Button/
+  /utils
+    Spotify.js
+  App.js
+  index.js
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Scripts
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- `npm start` – Runs the app in development mode
+- `npm run build` – Builds the app for production
 
-### Code Splitting
+## Design Docs
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Design documents for features can be found in the `/docs` folder:
 
-### Analyzing the Bundle Size
+- [Save Playlist Feature Design](./docs/save-playlist-feature-design.md)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## License
 
-### Making a Progressive Web App
+MIT
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Author
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Golden Dennar Tanimowo

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./SearchBar.module.css";
 import Button from "../Button/Button";
 
-const SearchBar = () => {
+const SearchBar = ({ onSearch, error }) => {
   const [song, setSong] = useState("");
 
   const handleChange = (e) => {
@@ -11,8 +11,10 @@ const SearchBar = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Searching for:", song);
-    setSong("");
+    if (song.trim()) {
+      onSearch(song);
+      setSong("");
+    }
   };
 
   return (
@@ -22,6 +24,7 @@ const SearchBar = () => {
       role="search"
       aria-label="Search songs"
     >
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <input
         type="text"
         id="searchInput"
