@@ -36,9 +36,10 @@ const Spotify = {
         localStorage.setItem("last_search_term", searchTerm);
       }
 
-      const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=${scope}&redirect_uri=${encodeURIComponent(
-        redirectUri
-      )}`;
+      const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=${encodeURIComponent(
+        scope
+      )}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+
       window.location = authUrl;
     }
   },
