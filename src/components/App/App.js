@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Header from "../Header/Header";
 import SearchBar from "../SearchBar/SearchBar";
 import SearchResults from "../SearchResults/SearchResults";
@@ -11,6 +11,23 @@ function App() {
   const [playlist, setPlaylist] = useState([]);
   const [error, setError] = useState(null);
   const [playlistTitle, setPlaylistTitle] = useState("iu playlist");
+
+  const handleSearch = useCallback(
+    async (query) => {
+      try {
+        const results = await Spotify.search(query);
+        const filteredResults = results.filter(
+          (track) => !playlist.some((p) => p.id === track.id)
+        );
+        setSearchResults(filteredResults);
+        setError(null);
+      } catch (err) {
+        setError("Search failed. Please try again.");
+        console.error("Spotify search failed:", err);
+      }
+    },
+    [playlist]
+  );
 
   useEffect(() => {
     const savedSearch = localStorage.getItem("last_search_term");
@@ -39,21 +56,6 @@ function App() {
   useEffect(() => {
     localStorage.setItem("playlistTitle", playlistTitle);
   }, [playlistTitle]);
-
-  const handleSearch = async (query) => {
-    try {
-      const results = await Spotify.search(query);
-      const filteredResults = results.filter(
-        (track) => !playlist.some((p) => p.id === track.id)
-      );
-      setSearchResults(filteredResults);
-      // setSearchResults(results);
-      setError(null);
-    } catch (err) {
-      setError("Search failed. Please try again.");
-      console.error("Spotify search failed:", err);
-    }
-  };
 
   const addTrack = (id) => {
     const trackToAdd = searchResults.find((track) => track.id === id);
