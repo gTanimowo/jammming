@@ -18,7 +18,7 @@ function App() {
       handleSearch(savedSearch);
       localStorage.removeItem("last_search_term");
     }
-  }, []);
+  }, [handleSearch]);
 
   useEffect(() => {
     localStorage.setItem("playlist", JSON.stringify(playlist));
