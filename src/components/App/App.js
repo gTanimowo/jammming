@@ -12,9 +12,9 @@ function App() {
   const [error, setError] = useState(null);
   const [playlistTitle, setPlaylistTitle] = useState("iu playlist");
 
-  useEffect(() => {
-    Spotify.getAccessToken();
-  }, []);
+  // useEffect(() => {
+  //   Spotify.getAccessToken();
+  // }, []);
 
   const handleSearch = useCallback(
     async (query) => {
