@@ -1,6 +1,6 @@
 let accessToken;
 const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
-const redirectUri = process.env.REACT_APP_SPOTIFY_REDIRECT_URI;
+const redirectUri = process.env.REACT_APP_REDIRECT_URI;
 const scope = process.env.REACT_APP_SPOTIFY_SCOPE;
 
 const Spotify = {
