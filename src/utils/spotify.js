@@ -1,9 +1,18 @@
 const Spotify = {
-  getAccessToken() {
-    return localStorage.getItem("access_token");
+  async getAccessToken() {
+    const token = localStorage.getItem("access_token");
+    const expiresAt = localStorage.getItem("expires_at");
+
+    if (token && expiresAt && Date.now() < Number(expiresAt)) {
+      return token;
+    } else {
+      // Token missing or expired: redirect to login or re-authenticate
+      throw new Error("Access token missing or expired");
+    }
   },
+
   async search(term) {
-    const token = Spotify.getAccessToken();
+    const token = await Spotify.getAccessToken();
     const endpoint = `https://api.spotify.com/v1/search?type=track&q=${encodeURIComponent(
       term
     )}`;
@@ -28,7 +37,7 @@ const Spotify = {
   },
 
   async getCurrentUserId() {
-    const token = Spotify.getAccessToken();
+    const token = await Spotify.getAccessToken();
     const response = await fetch("https://api.spotify.com/v1/me", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -41,7 +50,7 @@ const Spotify = {
   },
 
   async createPlaylist(userId, name) {
-    const token = Spotify.getAccessToken();
+    const token = await Spotify.getAccessToken();
     const response = await fetch(
       `https://api.spotify.com/v1/users/${userId}/playlists`,
       {
@@ -64,7 +73,7 @@ const Spotify = {
   },
 
   async addTracksToPlaylist(playlistId, trackUris) {
-    const token = Spotify.getAccessToken();
+    const token = await Spotify.getAccessToken();
     const response = await fetch(
       `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
       {
