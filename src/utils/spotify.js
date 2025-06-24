@@ -1,7 +1,6 @@
 let accessToken;
 const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
 const redirectUri = process.env.REACT_APP_REDIRECT_URI;
-const scope = "playlist-modify-public playlist-modify-private";
 
 const Spotify = {
   async getAccessToken() {
@@ -37,9 +36,11 @@ const Spotify = {
         localStorage.setItem("last_search_term", searchTerm);
       }
 
-      const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=${encodeURIComponent(
-        scope
-      )}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+      const scope = "playlist-modify-public";
+      const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=${scope}&redirect_uri=${encodeURIComponent(
+        redirectUri
+      )}`;
+      console.log("Redirecting to:", authUrl);
 
       window.location = authUrl;
 
