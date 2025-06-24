@@ -1,39 +1,45 @@
 const Spotify = {
-  async getAccessToken() {
+  getAccessToken() {
     const token = localStorage.getItem("access_token");
     const expiresAt = localStorage.getItem("expires_at");
 
     if (token && expiresAt && Date.now() < Number(expiresAt)) {
       return token;
-    } else {
-      // Token missing or expired: redirect to login or re-authenticate
-      throw new Error("Access token missing or expired");
     }
-  },
 
-  async search(term) {
-    const token = await Spotify.getAccessToken();
-    const endpoint = `https://api.spotify.com/v1/search?type=track&q=${encodeURIComponent(
-      term
-    )}`;
+    // Try to get token from URL hash after redirect
+    const hash = window.location.hash;
+    if (hash) {
+      const params = new URLSearchParams(hash.substring(1)); // remove '#'
+      const accessToken = params.get("access_token");
+      const expiresIn = params.get("expires_in");
 
-    const response = await fetch(endpoint, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+      if (accessToken && expiresIn) {
+        localStorage.setItem("access_token", accessToken);
+        localStorage.setItem(
+          "expires_at",
+          Date.now() + Number(expiresIn) * 1000
+        );
 
-    const jsonResponse = await response.json();
-    if (!jsonResponse.tracks) return [];
+        // Clean the URL so token is not visible
+        window.history.replaceState(null, null, window.location.pathname);
 
-    return jsonResponse.tracks.items.map((track) => ({
-      id: track.id,
-      name: track.name,
-      artist: track.artists[0].name,
-      album: track.album.name,
-      uri: track.uri,
-      preview: track.preview_url,
-    }));
+        return accessToken;
+      }
+    }
+
+    // Redirect to Spotify for login if no valid token
+    const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
+    const redirectUri = process.env.REACT_APP_REDIRECT_URI;
+    const scope = "playlist-modify-public playlist-modify-private";
+
+    const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=${encodeURIComponent(
+      scope
+    )}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+
+    window.location = authUrl;
+
+    return null; // Will likely never reach here due to redirect
   },
 
   async getCurrentUserId() {
