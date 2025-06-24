@@ -1,7 +1,7 @@
 let accessToken;
 const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
 const redirectUri = process.env.REACT_APP_REDIRECT_URI;
-const scope = process.env.REACT_APP_SPOTIFY_SCOPE;
+const scope = "playlist-modify-public playlist-modify-private";
 
 const Spotify = {
   async getAccessToken() {
@@ -44,7 +44,7 @@ const Spotify = {
       window.location = authUrl;
 
       // Return a promise that never resolves since user is redirected
-      return new Promise(() => {});
+      throw new Error("Redirecting to Spotify");
     }
   },
   async search(term) {
@@ -73,7 +73,7 @@ const Spotify = {
   },
 
   async getCurrentUserId() {
-    const token = Spotify.getAccessToken();
+    const token = await Spotify.getAccessToken();
     const response = await fetch("https://api.spotify.com/v1/me", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -86,7 +86,7 @@ const Spotify = {
   },
 
   async createPlaylist(userId, name) {
-    const token = Spotify.getAccessToken();
+    const token = await Spotify.getAccessToken();
     const response = await fetch(
       `https://api.spotify.com/v1/users/${userId}/playlists`,
       {
@@ -109,7 +109,7 @@ const Spotify = {
   },
 
   async addTracksToPlaylist(playlistId, trackUris) {
-    const token = Spotify.getAccessToken();
+    const token = await Spotify.getAccessToken();
     const response = await fetch(
       `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
       {
