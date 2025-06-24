@@ -42,8 +42,33 @@ const Spotify = {
     return null; // Will likely never reach here due to redirect
   },
 
+  async search(term) {
+    const token = Spotify.getAccessToken();
+    const endpoint = `https://api.spotify.com/v1/search?type=track&q=${encodeURIComponent(
+      term
+    )}`;
+
+    const response = await fetch(endpoint, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const jsonResponse = await response.json();
+    if (!jsonResponse.tracks) return [];
+
+    return jsonResponse.tracks.items.map((track) => ({
+      id: track.id,
+      name: track.name,
+      artist: track.artists[0].name,
+      album: track.album.name,
+      uri: track.uri,
+      preview: track.preview_url,
+    }));
+  },
+
   async getCurrentUserId() {
-    const token = await Spotify.getAccessToken();
+    const token = Spotify.getAccessToken();
     const response = await fetch("https://api.spotify.com/v1/me", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -56,7 +81,7 @@ const Spotify = {
   },
 
   async createPlaylist(userId, name) {
-    const token = await Spotify.getAccessToken();
+    const token = Spotify.getAccessToken();
     const response = await fetch(
       `https://api.spotify.com/v1/users/${userId}/playlists`,
       {
@@ -79,7 +104,7 @@ const Spotify = {
   },
 
   async addTracksToPlaylist(playlistId, trackUris) {
-    const token = await Spotify.getAccessToken();
+    const token = Spotify.getAccessToken();
     const response = await fetch(
       `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
       {
