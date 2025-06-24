@@ -1,52 +1,9 @@
-let accessToken;
 const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
 const redirectUri = process.env.REACT_APP_REDIRECT_URI;
 
 const Spotify = {
-  async getAccessToken() {
-    if (accessToken) return accessToken;
-
-    const storedToken = localStorage.getItem("access_token");
-    const expiresAt = localStorage.getItem("expires_at");
-
-    if (storedToken && expiresAt && new Date().getTime() < Number(expiresAt)) {
-      accessToken = storedToken;
-      return accessToken;
-    }
-
-    const tokenMatch = window.location.href.match(/access_token=([^&]*)/);
-    const expiresInMatch = window.location.href.match(/expires_in=([^&]*)/);
-
-    if (tokenMatch && expiresInMatch) {
-      accessToken = tokenMatch[1];
-      const expiresIn = Number(expiresInMatch[1]);
-      const now = new Date().getTime();
-      localStorage.setItem("access_token", accessToken);
-      localStorage.setItem("expires_at", now + expiresIn * 1000);
-
-      window.setTimeout(() => (accessToken = ""), expiresIn * 1000);
-      window.history.pushState("Access Token", null, "/");
-      return accessToken;
-    } else {
-      // Save last search term if any
-      const urlParams = new URLSearchParams(window.location.search);
-      const searchTerm = urlParams.get("search") || "";
-
-      if (searchTerm) {
-        localStorage.setItem("last_search_term", searchTerm);
-      }
-
-      const scope = "playlist-modify-public";
-      const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=${scope}&redirect_uri=${encodeURIComponent(
-        redirectUri
-      )}`;
-      console.log("Redirecting to:", authUrl);
-
-      window.location = authUrl;
-
-      // Return a promise that never resolves since user is redirected
-      throw new Error("Redirecting to Spotify");
-    }
+  getAccessToken() {
+    return localStorage.getItem("access_token");
   },
   async search(term) {
     const token = await Spotify.getAccessToken();
@@ -74,7 +31,7 @@ const Spotify = {
   },
 
   async getCurrentUserId() {
-    const token = await Spotify.getAccessToken();
+    const token = Spotify.getAccessToken();
     const response = await fetch("https://api.spotify.com/v1/me", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -87,7 +44,7 @@ const Spotify = {
   },
 
   async createPlaylist(userId, name) {
-    const token = await Spotify.getAccessToken();
+    const token = Spotify.getAccessToken();
     const response = await fetch(
       `https://api.spotify.com/v1/users/${userId}/playlists`,
       {
@@ -110,7 +67,7 @@ const Spotify = {
   },
 
   async addTracksToPlaylist(playlistId, trackUris) {
-    const token = await Spotify.getAccessToken();
+    const token = Spotify.getAccessToken();
     const response = await fetch(
       `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
       {
@@ -140,4 +97,54 @@ const Spotify = {
   },
 };
 
-export default Spotify;
+// export default Spotify;
+// const Spotify = {
+//   async getAccessToken() {
+//     if (accessToken) return accessToken;
+
+//     const storedToken = localStorage.getItem("access_token");
+//     const expiresAt = localStorage.getItem("expires_at");
+
+//     if (storedToken && expiresAt && new Date().getTime() < Number(expiresAt)) {
+//       accessToken = storedToken;
+//       return accessToken;
+//     }
+
+//     const tokenMatch = window.location.href.match(/access_token=([^&]*)/);
+//     const expiresInMatch = window.location.href.match(/expires_in=([^&]*)/);
+
+//     if (tokenMatch && expiresInMatch) {
+//       accessToken = tokenMatch[1];
+//       const expiresIn = Number(expiresInMatch[1]);
+//       const now = new Date().getTime();
+//       localStorage.setItem("access_token", accessToken);
+//       localStorage.setItem("expires_at", now + expiresIn * 1000);
+
+//       window.setTimeout(() => (accessToken = ""), expiresIn * 1000);
+//       window.history.pushState("Access Token", null, "/");
+//       return accessToken;
+//     } else {
+//       // Save last search term if any
+//       const urlParams = new URLSearchParams(window.location.search);
+//       const searchTerm = urlParams.get("search") || "";
+
+//       if (searchTerm) {
+//         localStorage.setItem("last_search_term", searchTerm);
+//       }
+
+//       const scope = "playlist-modify-public";
+//       const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=${scope}&redirect_uri=${encodeURIComponent(
+//         redirectUri
+//       )}`;
+//       console.log("Redirecting to:", authUrl);
+
+//       window.location = authUrl;
+
+//       // Return a promise that never resolves since user is redirected
+//       throw new Error("Redirecting to Spotify");
+//     }
+//   },
+
+// };
+
+// export default Spotify;

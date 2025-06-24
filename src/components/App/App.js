@@ -12,9 +12,32 @@ function App() {
   const [error, setError] = useState(null);
   const [playlistTitle, setPlaylistTitle] = useState("iu playlist");
 
-  // useEffect(() => {
-  //   Spotify.getAccessToken();
-  // }, []);
+  useEffect(() => {
+    const code = new URLSearchParams(window.location.search).get("code");
+    const verifier = localStorage.getItem("pkce_verifier");
+
+    if (code && verifier) {
+      fetch("https://accounts.spotify.com/api/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          grant_type: "authorization_code",
+          code,
+          redirect_uri: "https://jammming-app-gd.netlify.app",
+          client_id: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
+          code_verifier: verifier,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          localStorage.setItem("access_token", data.access_token);
+          localStorage.setItem("expires_in", data.expires_in);
+          window.history.replaceState({}, document.title, "/");
+        });
+    }
+  }, []);
 
   const handleSearch = useCallback(
     async (query) => {
