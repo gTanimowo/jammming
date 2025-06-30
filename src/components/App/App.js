@@ -10,7 +10,7 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [playlist, setPlaylist] = useState([]);
   const [error, setError] = useState(null);
-  const [playlistTitle, setPlaylistTitle] = useState("iu playlist");
+  const [playlistTitle, setPlaylistTitle] = useState("Playlist Name");
   console.log("hit 4");
 
   const handleSearch = useCallback(
@@ -95,11 +95,17 @@ function App() {
     const uris = playlist.map((track) => track.uri);
 
     try {
-      await Spotify.savePlaylist(playlistTitle, uris);
-      setPlaylist([]);
+      const success = await Spotify.savePlaylist(playlistTitle, uris);
+      if (success) {
+        setPlaylist([]);
+        setPlaylistTitle("New Playlist"); // Reset title
+        alert("Playlist saved successfully to Spotify!");
+      } else {
+        alert("Failed to save playlist");
+      }
     } catch (err) {
       console.error(err);
-      throw err;
+      alert("Error saving playlist: " + err.message);
     }
   };
 

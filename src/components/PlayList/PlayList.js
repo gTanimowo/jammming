@@ -4,11 +4,11 @@ import TrackList from "../TrackList/TrackList";
 import Button from "../Button/Button";
 
 const Playlist = ({ tracks, onRemove, onSave, title, setTitle }) => {
-  // const [title, setTitle] = useState("iu playlist");
   const [isEditing, setIsEditing] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {
+    console.log("hit save");
     if (!title.trim()) return;
 
     setIsEditing(false);
