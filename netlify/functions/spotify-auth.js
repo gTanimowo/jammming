@@ -1,18 +1,18 @@
-import axios from "axios";
+const axios = require("axios");
 
-export const handler = async (event) => {
+exports.handler = async (event) => {
   try {
     console.log("Incoming request body:", event.body);
-    
+
     const { code, verifier, redirect_uri } = JSON.parse(event.body);
-    
+
     const params = new URLSearchParams({
       grant_type: "authorization_code",
       code,
       redirect_uri,
       client_id: process.env.SPOTIFY_CLIENT_ID,
       client_secret: process.env.SPOTIFY_CLIENT_SECRET,
-      code_verifier: verifier
+      code_verifier: verifier,
     });
 
     console.log("Request params:", params.toString());
@@ -20,31 +20,31 @@ export const handler = async (event) => {
     const response = await axios.post(
       "https://accounts.spotify.com/api/token",
       params,
-      { 
-        headers: { 
+      {
+        headers: {
           "Content-Type": "application/x-www-form-urlencoded",
-          "Accept": "application/json"
-        }
+          Accept: "application/json",
+        },
       }
     );
 
     return {
       statusCode: 200,
-      body: JSON.stringify(response.data)
+      body: JSON.stringify(response.data),
     };
   } catch (error) {
     console.error("Full error:", {
       message: error.message,
       response: error.response?.data,
-      stack: error.stack
+      stack: error.stack,
     });
-    
+
     return {
       statusCode: error.response?.status || 400,
       body: JSON.stringify({
         error: "Token exchange failed",
-        details: error.response?.data || error.message
-      })
+        details: error.response?.data || error.message,
+      }),
     };
   }
 };
