@@ -11,7 +11,6 @@ function App() {
   const [playlist, setPlaylist] = useState([]);
   const [error, setError] = useState(null);
   const [playlistTitle, setPlaylistTitle] = useState("Playlist Name");
-  console.log("hit 4");
 
   const handleSearch = useCallback(
     async (query) => {
@@ -104,7 +103,6 @@ function App() {
         alert("Failed to save playlist");
       }
     } catch (err) {
-      console.error(err);
       alert("Error saving playlist: " + err.message);
     }
   };

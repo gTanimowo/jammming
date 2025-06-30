@@ -8,7 +8,6 @@ const Playlist = ({ tracks, onRemove, onSave, title, setTitle }) => {
   const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {
-    console.log("hit save");
     if (!title.trim()) return;
 
     setIsEditing(false);

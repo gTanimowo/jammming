@@ -2,8 +2,6 @@ const axios = require("axios");
 
 exports.handler = async (event) => {
   try {
-    console.log("Incoming request body:", event.body);
-
     const { code, verifier, redirect_uri } = JSON.parse(event.body);
 
     const params = new URLSearchParams({
@@ -14,8 +12,6 @@ exports.handler = async (event) => {
       client_secret: process.env.SPOTIFY_CLIENT_SECRET,
       code_verifier: verifier,
     });
-
-    console.log("Request params:", params.toString());
 
     const response = await axios.post(
       "https://accounts.spotify.com/api/token",

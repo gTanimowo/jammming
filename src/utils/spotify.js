@@ -1,4 +1,3 @@
-// src/utils/spotify.js
 const Spotify = {
   // Generate random string for PKCE verifier
   _generateRandomString(length) {
