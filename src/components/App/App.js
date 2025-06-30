@@ -12,57 +12,36 @@ function App() {
   const [error, setError] = useState(null);
   const [playlistTitle, setPlaylistTitle] = useState("iu playlist");
   console.log("hit 4");
-  // useEffect(() => {
-  //   const code = new URLSearchParams(window.location.search).get("code");
-  //   const verifier = localStorage.getItem("pkce_verifier");
 
-  //   if (code && verifier) {
-  //     fetch("https://accounts.spotify.com/api/token", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/x-www-form-urlencoded",
-  //       },
-  //       body: new URLSearchParams({
-  //         grant_type: "authorization_code",
-  //         code,
-  //         redirect_uri: process.env.REACT_APP_REDIRECT_URI,
-  //         client_id: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
-  //         code_verifier: verifier,
-  //       }),
-  //     })
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         localStorage.setItem("access_token", data.access_token);
-  //         localStorage.setItem("expires_in", data.expires_in);
-  //         window.history.replaceState({}, document.title, "/");
-  //       });
-  //   }
-  // }, []);
+  useEffect(() => {
+    // Handle completion of auth flow
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("code")) {
+      const pendingSearch = localStorage.getItem("pending_search");
+      if (pendingSearch) {
+        localStorage.removeItem("pending_search");
+        handleSearch(pendingSearch);
+      }
+    }
+  }, [handleSearch]);
 
   const handleSearch = useCallback(
     async (query) => {
       try {
-        console.log("Attempting to get access token...");
-
-        // 1. FIRST get the token (this may redirect to Spotify)
         const token = await Spotify.getAccessToken();
         if (!token) {
-          // If no token and no redirect occurred, throw error
-          throw new Error("Authentication failed");
+          // Store the search term for after auth completes
+          localStorage.setItem("pending_search", query);
+          return; // Redirect to Spotify will happen
         }
 
-        // 2. ONLY proceed with search if we have a token
-        console.log("Token acquired, proceeding with search...");
+        // Proceed with search if we have a token
         const results = await Spotify.search(query);
-
-        const filteredResults = results.filter(
-          (track) => !playlist.some((p) => p.id === track.id)
+        setSearchResults(
+          results.filter((track) => !playlist.some((p) => p.id === track.id))
         );
-        setSearchResults(filteredResults);
-        setError(null);
       } catch (err) {
         setError("Search failed. Please try again.");
-        console.error("Spotify search failed:", err);
       }
     },
     [playlist]

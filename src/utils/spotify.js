@@ -22,69 +22,61 @@ const Spotify = {
 
   // Main authentication method
   async getAccessToken() {
-    // 1. Check for valid existing token
+    // Check for existing valid token
     const storedToken = localStorage.getItem("access_token");
     const expiresAt = localStorage.getItem("expires_at");
-
     if (storedToken && expiresAt && Date.now() < Number(expiresAt)) {
       return storedToken;
     }
 
-    // 2. Handle PKCE callback
+    // Handle PKCE callback after Spotify redirect
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
-    const storedVerifier = localStorage.getItem("pkce_verifier");
+    const verifier = localStorage.getItem("pkce_verifier");
 
-    if (code && storedVerifier) {
+    if (code && verifier) {
       try {
-        const response = await fetch(
-          `http://127.0.0.1:8888/.netlify/functions/spotify-auth`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              code,
-              verifier: storedVerifier,
-              redirect_uri: window.location.origin,
-            }),
-          }
-        );
+        const response = await fetch("/.netlify/functions/spotify-auth", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            code,
+            verifier,
+            redirect_uri: window.location.origin,
+          }),
+        });
 
         if (!response.ok) throw new Error("Token exchange failed");
 
         const { access_token, expires_in } = await response.json();
-
-        // Store token and cleanup
         localStorage.setItem("access_token", access_token);
-        localStorage.setItem("expires_at", Date.now() + expires_in * 3000);
-        localStorage.removeItem("pkce_verifier");
-        window.history.replaceState({}, "", window.location.pathname);
-
+        localStorage.setItem("expires_at", Date.now() + expires_in * 1000);
+        window.history.replaceState({}, "", "/"); // Clean URL
         return access_token;
       } catch (error) {
         console.error("Token exchange error:", error);
-        this._clearAuthData();
         return null;
       }
     }
 
-    // 3. Initiate PKCE auth flow
-    const verifier = this._generateRandomString(64);
-    const challenge = await this._generateCodeChallenge(verifier);
+    // Initiate PKCE flow if no token exists
+    const newVerifier = this._generateRandomString(64);
+    const challenge = await this._generateCodeChallenge(newVerifier);
+    localStorage.setItem("pkce_verifier", newVerifier);
 
-    localStorage.setItem("pkce_verifier", verifier);
+    const authUrl = `https://accounts.spotify.com/authorize?${new URLSearchParams(
+      {
+        response_type: "code",
+        client_id: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
+        redirect_uri: window.location.origin,
+        scope: "playlist-modify-private playlist-modify-public",
+        code_challenge_method: "S256",
+        code_challenge: challenge,
+      }
+    )}`;
 
-    const authParams = new URLSearchParams({
-      client_id: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
-      response_type: "code",
-      redirect_uri: window.location.origin,
-      scope: "playlist-modify-private playlist-modify-public",
-      code_challenge_method: "S256",
-      code_challenge: challenge,
-    });
-
-    window.location.href = `https://accounts.spotify.com/authorize?${authParams}`;
-    return null;
+    window.location.href = authUrl; // Redirect to Spotify
+    return null; // Will redirect before reaching here
   },
 
   // Clear authentication data
