@@ -35,7 +35,7 @@ const SearchBar = ({ onSearch, error }) => {
         aria-label="Search input"
         className={styles.searchInput}
       />
-      <Button text="Search" />
+      <Button text="Search" type="submit"/>
     </form>
   );
 };

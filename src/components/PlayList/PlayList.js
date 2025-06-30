@@ -48,7 +48,7 @@ const Playlist = ({ tracks, onRemove, onSave, title, setTitle }) => {
       {loading ? (
         <Button text="Saving..." disabled />
       ) : (
-        <Button text="Save to Spotify" onClick={handleSave} />
+        <Button text="Save to Spotify" onClick={handleSave} type="submit" />
       )}
     </div>
   );
