@@ -13,18 +13,6 @@ function App() {
   const [playlistTitle, setPlaylistTitle] = useState("iu playlist");
   console.log("hit 4");
 
-  useEffect(() => {
-    // Handle completion of auth flow
-    const params = new URLSearchParams(window.location.search);
-    if (params.has("code")) {
-      const pendingSearch = localStorage.getItem("pending_search");
-      if (pendingSearch) {
-        localStorage.removeItem("pending_search");
-        handleSearch(pendingSearch);
-      }
-    }
-  }, [handleSearch]);
-
   const handleSearch = useCallback(
     async (query) => {
       try {
@@ -46,6 +34,18 @@ function App() {
     },
     [playlist]
   );
+
+  useEffect(() => {
+    // Handle completion of auth flow
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("code")) {
+      const pendingSearch = localStorage.getItem("pending_search");
+      if (pendingSearch) {
+        localStorage.removeItem("pending_search");
+        handleSearch(pendingSearch);
+      }
+    }
+  }, [handleSearch]);
 
   useEffect(() => {
     const savedSearch = localStorage.getItem("last_search_term");
