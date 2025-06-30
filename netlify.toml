@@ -1,0 +1,3 @@
+[build]
+  functions = "netlify/functions"  # Points to your functions directory
+  publish = "build"                # React's build folder
