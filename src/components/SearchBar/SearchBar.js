@@ -31,7 +31,7 @@ const SearchBar = ({ onSearch, error }) => {
         name="search"
         value={song}
         onChange={handleChange}
-        placeholder="Search song"
+        placeholder="Search song/artist"
         aria-label="Search input"
         className={styles.searchInput}
       />
