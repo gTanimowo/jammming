@@ -54,6 +54,7 @@ const Spotify = {
         return access_token;
       } catch (error) {
         console.error("Token exchange error:", error);
+        alert("Oops, something went wrong!");
         return null;
       }
     }
@@ -109,6 +110,7 @@ const Spotify = {
       }));
     } catch (error) {
       console.error("Search error:", error);
+      alert("Oops, something went wrong!");
       return [];
     }
   },
@@ -157,6 +159,7 @@ const Spotify = {
       return true;
     } catch (error) {
       console.error("Save playlist error:", error);
+      alert("Oops, something went wrong!");
       return false;
     }
   },
