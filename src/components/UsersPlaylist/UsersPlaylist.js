@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Spotify from "../../utils/spotify";
 import styles from "../SearchResults/SearchResults.module.css";
 
