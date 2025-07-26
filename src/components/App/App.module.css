@@ -16,6 +16,12 @@
     margin-top: 20px;
   }
 
+  .mainContent > * {
+    flex: 1;  
+    min-width: 0; 
+  }
+  
+
   /* For smaller screens (mobile/tablet), stack vertically */
   @media (max-width: 768px) {
     .mainContent {

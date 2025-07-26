@@ -165,19 +165,25 @@ const Spotify = {
   },
   //get playlist
   async getUserPlaylists() {
-    const accessToken = Spotify.getAccessToken();
-    const response = await fetch("https://api.spotify.com/v1/me/playlists", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    try {
+      const accessToken = Spotify.getAccessToken();
+      if (!accessToken) {
+        throw new Error("Please authenticate with Spotify first");
+      }
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch user playlists");
+      const response = await fetch("https://api.spotify.com/v1/me/playlists", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Spotify API error: ${response.status}`);
+      }
+
+      const jsonResponse = await response.json();
+      return jsonResponse.items;
+    } catch (error) {
+      throw new Error(`Failed to fetch playlists: ${error.message}`);
     }
-
-    const jsonResponse = await response.json();
-    return jsonResponse.items;
   },
 };
 

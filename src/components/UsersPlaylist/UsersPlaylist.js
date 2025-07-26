@@ -5,36 +5,40 @@ import styles from "../SearchResults/SearchResults.module.css";
 const UsersPlaylist = () => {
   const [playlists, setPlaylists] = useState([]);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchPlaylists = async () => {
-      try {
-        const userPlaylists = await Spotify.getUserPlaylists();
-        setPlaylists(userPlaylists);
-        console.log("User Playlists:", userPlaylists);
-      } catch (err) {
-        setError(err.message || "Could not load playlists");
-      }
-    };
-
-    fetchPlaylists();
-  }, []);
-
-  if (error) return <div>Error: {error}</div>;
-  if (!playlists.length) return <div>Loading your playlists...</div>;
+  const handleGetPlaylists = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const userPlaylists = await Spotify.getUserPlaylists();
+      setPlaylists(userPlaylists);
+    } catch (err) {
+      setError(err.message || "Could not load playlists");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className={styles.resultsContainer}>
       <h2>Your Playlists</h2>
-      <ul>
-        {playlists.map((playlist) => (
-          <li key={playlist.id}>
-            {playlist.name} ({playlist.tracks.total} tracks)
-          </li>
-        ))}
-      </ul>
+      <button onClick={handleGetPlaylists} disabled={isLoading}>
+        {isLoading ? "Loading..." : "Show My Playlists"}
+      </button>
+
+      {error && <div className="error">Error: {error}</div>}
+
+      {playlists.length > 0 && (
+        <ul>
+          {playlists.map((playlist) => (
+            <li key={playlist.id}>
+              {playlist.name} ({playlist.tracks.total} tracks)
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
-
 export default UsersPlaylist;
