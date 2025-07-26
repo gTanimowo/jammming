@@ -50,7 +50,7 @@ const Spotify = {
         const { access_token, expires_in } = await response.json();
         localStorage.setItem("access_token", access_token);
         localStorage.setItem("expires_at", Date.now() + expires_in * 1000);
-        window.history.replaceState({}, "", "/"); // Clean URL
+        window.history.replaceState({}, "", "/");
         return access_token;
       } catch (error) {
         console.error("Token exchange error:", error);
@@ -162,6 +162,22 @@ const Spotify = {
       alert("Oops, something went wrong!");
       return false;
     }
+  },
+  //get playlist
+  async getUserPlaylists() {
+    const accessToken = Spotify.getAccessToken();
+    const response = await fetch("https://api.spotify.com/v1/me/playlists", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user playlists");
+    }
+
+    const jsonResponse = await response.json();
+    return jsonResponse.items;
   },
 };
 

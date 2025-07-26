@@ -9,6 +9,23 @@
     flex-direction: column;
     justify-content: space-between;
     max-width: 35%;
+    animation: slideUpFadeIn 0.8s ease-out;
+  }
+
+
+  @keyframes slideUpFadeIn {
+    from {
+      transform: translateY(40px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .playlistContainer:hover{
+    box-shadow: rgba(63, 63, 63, 0.267) 0px 5px 15px;
   }
 
   .playlistInput {
@@ -36,7 +53,7 @@
 
   @media (max-width: 768px) {
     .playlistContainer {
-      max-width: 80% !important;  /* full width on mobile */
-      margin: 0 auto 20px auto;    /* center horizontally and add bottom spacing */
+      max-width: 80% !important;  
+      margin: 0 auto 20px auto;    
     }
   }

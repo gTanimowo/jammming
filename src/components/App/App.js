@@ -5,6 +5,7 @@ import SearchResults from "../SearchResults/SearchResults";
 import styles from "./App.module.css";
 import Playlist from "../PlayList/PlayList";
 import Spotify from "../../utils/spotify";
+import UsersPlaylist from "../UsersPlaylist/UsersPlaylist";
 
 function App() {
   const [searchResults, setSearchResults] = useState([]);
@@ -17,12 +18,10 @@ function App() {
       try {
         const token = await Spotify.getAccessToken();
         if (!token) {
-          // Store the search term for after auth completes
           localStorage.setItem("pending_search", query);
-          return; // Redirect to Spotify will happen
+          return;
         }
 
-        // Proceed with search if we have a token
         const results = await Spotify.search(query);
         setSearchResults(
           results.filter((track) => !playlist.some((p) => p.id === track.id))
@@ -97,7 +96,7 @@ function App() {
       const success = await Spotify.savePlaylist(playlistTitle, uris);
       if (success) {
         setPlaylist([]);
-        setPlaylistTitle("New Playlist"); // Reset title
+        setPlaylistTitle("New Playlist");
         alert("Playlist saved successfully to Spotify!");
       } else {
         alert("Failed to save playlist");
@@ -112,6 +111,7 @@ function App() {
       <Header />
       <SearchBar onSearch={handleSearch} />
       <div className={styles.mainContent}>
+        <UsersPlaylist />
         <SearchResults tracks={searchResults} onAdd={addTrack} error={error} />
         <Playlist
           tracks={playlist}

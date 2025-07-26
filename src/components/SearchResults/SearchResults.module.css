@@ -8,13 +8,29 @@
     max-height: 70vh;
     overflow-y: auto;
     max-width: 35%;
+    animation: slideUpFadeIn 0.8s ease-out;
   }
   
-  @media (max-width: 768px) {
+  @keyframes slideUpFadeIn {
+    from {
+      transform: translateY(40px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .resultsContainer:hover{
+    box-shadow: rgba(63, 63, 63, 0.267) 0px 5px 15px;
+  }
+
   
-    /* Override resultsContainer width on mobile to be wider */
+  @media (max-width: 768px) {
+
     .resultsContainer {
-      max-width: 80% !important;  /* let it fill container */
-      margin: 20px auto 50px auto;    /* center and add bottom margin */
+      max-width: 80% !important;  
+      margin: 20px auto 50px auto;    
     }
   }
