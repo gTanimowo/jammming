@@ -5,7 +5,6 @@ import SearchResults from "../SearchResults/SearchResults";
 import styles from "./App.module.css";
 import Playlist from "../PlayList/PlayList";
 import Spotify from "../../utils/spotify";
-import UsersPlaylist from "../UsersPlaylist/UsersPlaylist";
 
 function App() {
   const [searchResults, setSearchResults] = useState([]);
@@ -111,7 +110,6 @@ function App() {
       <Header />
       <SearchBar onSearch={handleSearch} />
       <div className={styles.mainContent}>
-        <UsersPlaylist />
         <SearchResults tracks={searchResults} onAdd={addTrack} error={error} />
         <Playlist
           tracks={playlist}
